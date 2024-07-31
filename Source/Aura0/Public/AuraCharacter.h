@@ -22,6 +22,11 @@ public:
 		virtual void PossessedBy(AController*NewController) override;
 		virtual void OnRep_PlayerState()override;
 
+
+		virtual int32 GetPlayerLevel() override;
+
+
+
 private:
 	//初始化属性同步模式(血量、蓝量、体力、声音、特效、技能冷却、等等)
 		//与AuraAbilitySystemComponent相关

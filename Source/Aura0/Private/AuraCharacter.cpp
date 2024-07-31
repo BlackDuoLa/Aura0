@@ -48,6 +48,13 @@ void AAuraCharacter::OnRep_PlayerState()
 
 }
 
+int32 AAuraCharacter::GetPlayerLevel()
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetPlayerLevel();
+}
+
 //初始化属性同步模式(血量、蓝量、体力、声音、特效、技能冷却、等等)
 //这就是玩家的属性同步模式(血量、蓝量、体力、声音、特效、技能冷却、等等)
 //与AuraAbilitySystemComponent相关

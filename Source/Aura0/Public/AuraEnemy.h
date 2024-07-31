@@ -23,10 +23,24 @@ public:
 		//不沟边
 		virtual  void UnHightLightActor() override;
 
+		//
+
+		virtual int32 GetPlayerLevel() override;
 
 		protected:
 			//virtual用于定义虚函数、继承类中被重写（覆盖）的函数
 			virtual void BeginPlay() override;
 	
 			virtual void InitAbilityActorInfo() override;
+
+
+			//创建敌人的等级
+			UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+			int32 Level = 1;
+
+
+
+
+
+
 };
