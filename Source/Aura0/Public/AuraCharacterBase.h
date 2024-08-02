@@ -44,13 +44,19 @@ protected:
 	virtual void InitAbilityActorInfo();
 
 
-	//玩家属性添加方法之一
+	//玩家默认主属性
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category= "Attributes")
 	TSubclassOf<UGameplayEffect>DefaultPrimaryAttributes;
 
-
+	//玩家默认次属性
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
 	TSubclassOf<UGameplayEffect>DefaultSecondaryAttributes;
+
+	//玩家默认属性
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
+	TSubclassOf<UGameplayEffect>DefaultVitalAttributes;
+
+
 
 	//在角色身上添加GE系统可配置角色属性面板
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect>GameplayEffectClass, float Level) const;
