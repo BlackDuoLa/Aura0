@@ -2,12 +2,16 @@
 
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
+
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
 
 	//OnGameplayEffectAppliedDelegateToSelf这是ASC自带的广播函数
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectApplied);
+
+	
 
 
 
