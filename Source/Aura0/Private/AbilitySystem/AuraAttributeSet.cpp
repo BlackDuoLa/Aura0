@@ -6,12 +6,37 @@
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AuraGameplayTags.h"
+
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	//初始化生命/法术值
-		InitHealth(10.f);
-		InitMana(40.f);
+	
+	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+
+
+	////用于角色属性映射到菜单Menu
+	//Primary_Strength
+	TagsToAttributes.Add(GameplayTags.Attribute_Primary_Strength, GetStrengthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Primary_Intelligence, GetIntelligenceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Primary_Resilience, GetResilienceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Primary_Vigor, GetVigorAttribute);
+	
+
+	////用于角色属性映射到菜单Menu
+	//Secondary Attributes
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_Aromr, GetArmorAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_AromrPenetration, GetArmorAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_BlockChance, GetBlockChanceAttribute);
+
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_CriticalHitChance, GetCriticalHitChanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_CriticalHitDamage, GetCriticalHitDamageAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_CriticalHitResistance, GetCriticalHitResistanceAttribute);
+
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_HealthRegeneration, GetHealthRegenerationAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_ManaRegeneration, GetManaRegenerationAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_MaxHealth, GetMaxHealthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_MaxMana, GetMaxManaAttribute);
 
 }
 

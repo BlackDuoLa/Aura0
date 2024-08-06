@@ -72,6 +72,11 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FString("Armor of Health regenerated every 1 second")
 	);
 
+	GameplayTags.Attribute_Secondary_ManaRegeneration = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Secondary.ManaRegeneration"),
+		FString("Armor of Health regenerated every 1 second")
+	);
+
 	GameplayTags.Attribute_Secondary_MaxHealth = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.MaxHealth"),
 		FString("Maximum amount of Health obtainable")

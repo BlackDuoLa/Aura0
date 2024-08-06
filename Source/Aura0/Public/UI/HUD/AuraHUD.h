@@ -6,7 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "AuraHUD.generated.h"
 
-
+class UAttributeMenuWidgetController;
 class UOverlayWidgetController;
 class UAuraUserWidget;
 
@@ -24,12 +24,13 @@ class AURA0_API AAuraHUD : public AHUD
 	
 
 public:
-	//AuraUI控制器基类的指针
-	UPROPERTY()
-	TObjectPtr<UAuraUserWidget>OverlayWidget;
+	
 
 	//得到OverlayWidgetController类的指针，指针里传入（）里的参数
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
+
+
+	UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const FWidgetControllerParams& WCParams);
 
 	//设置初始化函数InitOverlay，要持有四大函数APlayerController，APlayerState，UAbilitySystemComponent，UAttributeSet
 	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC,UAttributeSet* AS);
@@ -38,6 +39,12 @@ public:
 protected:
 
 private:
+
+	//AuraUI控制器基类的指针
+	UPROPERTY()
+	TObjectPtr<UAuraUserWidget>OverlayWidget;
+
+
 	//加载AuraUI控制器基类，要在蓝图中设置的类
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UAuraUserWidget>OverlayWidgetClass;
@@ -49,5 +56,11 @@ private:
 	//AuraUI控制器基类的子类的指针(名字是Overlay)
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UOverlayWidgetController>OverlayWidgetControllerClass;
+
+	UPROPERTY()
+	TObjectPtr<UAttributeMenuWidgetController>AttributeMenuWidgetController;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UAttributeMenuWidgetController>AttributeMenuWidgetControllerClass;
 
 };

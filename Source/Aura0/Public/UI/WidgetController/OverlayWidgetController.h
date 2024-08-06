@@ -30,7 +30,7 @@ class UAuraUserWidget;
 // 声明关于AS角色生命属性的动态多播委托
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
 
-//声明玩家UI界面的动态多播委托
+//声明玩家拾起物品UI界面的动态多播委托
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignatura, FUIWidgetRow, Row);
 
 
@@ -73,12 +73,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadonly, Category = "Widget Data")
 	TObjectPtr<UDataTable>MessageWidgetDataTable;
 
-	//玩家AS生命属性发生变化函数，当玩家生命值发生变化会激活此函数
-	//void HealthChanged(const FOnAttributeChangeData& Data)const;
-	//void MaxHealthChanged(const FOnAttributeChangeData& Data)const;
-
-	//void ManaChanged(const FOnAttributeChangeData& Data)const;
-	//void MaxManaChanged(const FOnAttributeChangeData& Data)const;
 
 	template<typename T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
@@ -90,7 +84,6 @@ protected:
 	T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
 	{
 		return DataTable->FindRow<T>(Tag.GetTagName(), TEXT(""));
-		
 	}
 
 

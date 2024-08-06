@@ -17,6 +17,7 @@
  GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
  GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+
 USTRUCT()
 struct FEffectProperties
 {
@@ -44,9 +45,17 @@ struct FEffectProperties
 	UPROPERTY()
 	ACharacter* TargetCharacter = nullptr;
 
-
-
 };
+
+
+
+
+//用于角色属性映射到菜单Menu
+//typedef  TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPtr;
+template<class T>
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance <T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
+
 struct FGameplayEffectModCallbackData;
 
 UCLASS()
@@ -62,6 +71,15 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attrribute, float& NewValue) override;
 	
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+
+	//P93
+	//用于角色属性映射到菜单Menu
+	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>>TagsToAttributes;
+	
+
+
+
 
 	//创建角色的力量属性（增加伤害）
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")

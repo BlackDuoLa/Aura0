@@ -4,6 +4,7 @@
 #include "UI/HUD/AuraHUD.h"
 #include "UI\Widget\AuraUserWidget.h"
 #include "UI\WidgetController\OverlayWidgetController.h"
+#include "UI/WidgetController/AttributeMenuWidgetController.h"
 
 UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetControllerParams& WCParams)
 {
@@ -15,11 +16,23 @@ UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetCont
 		//把OverlayWidgetController类的参数，设置为WidgetControllerParams(WCParams)
 		OverlayWidgetController->SetWidgetControllerParams(WCParams);
 		OverlayWidgetController->BindCallbacksToDependencies();
-
-
-		return OverlayWidgetController;
 	}
 	return OverlayWidgetController;
+}
+
+UAttributeMenuWidgetController* AAuraHUD::GetAttributeMenuWidgetController(const FWidgetControllerParams& WCParams)
+{
+
+	if (AttributeMenuWidgetController == nullptr)
+	{
+
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this, AttributeMenuWidgetControllerClass);
+		AttributeMenuWidgetController->SetWidgetControllerParams(WCParams);
+		AttributeMenuWidgetController->BindCallbacksToDependencies();//绑定监听数值变化
+
+	}
+
+	return AttributeMenuWidgetController;
 }
 
 //这个函数是为了初始化四个值

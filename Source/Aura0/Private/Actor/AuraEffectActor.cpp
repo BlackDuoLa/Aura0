@@ -94,9 +94,7 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 		}
 		for (FActiveGameplayEffectHandle& Handle : HandlesToRemove)
 		{
-
 			ActiveEffectHandles.FindAndRemoveChecked(Handle);
-
 		}
 	}
 }
