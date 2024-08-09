@@ -18,12 +18,11 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 			[this,Pair,AS](const FOnAttributeChangeData& Data)
 			{
 				//此为下面函数的引用
-				//BroadcastAttributeInfo(Pair.Key, Pair.Value());
+			//BroadcastAttributeInfo(Pair.Key, Pair.Value());
 
-				FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key, false);
+				FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
 				Info.AttributeValue = Pair.Value().GetNumericValue(AS);
 				AttributeInfoDelegate.Broadcast(Info);
-
 
 
 			}
@@ -43,24 +42,19 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 		//此为下面函数的引用
 		//BroadcastAttributeInfo(Pair.Key, Pair.Value());
 
-		FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key, false);
+		FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
 		Info.AttributeValue = Pair.Value().GetNumericValue(AS);
 		AttributeInfoDelegate.Broadcast(Info);
-	
-
 
 	}
 }
 
 
-
-
-
 //这个函数的作用就是简写上面For函数的内容
 //应该是两个函数都要写之几行函数，博主觉得太麻烦了，不美观，就定义了这个函数，要用的时候引用就是了
-//void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag,const FGameplayAttribute& Attribute)
+//void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag,const FGameplayAttribute& Attribute) const
 //{
-//	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag,false);
+//	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag);
 //	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);
 //	AttributeInfoDelegate.Broadcast(Info);
 //}

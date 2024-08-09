@@ -33,6 +33,8 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	//初始化属性同步模式(血量、蓝量、体力、声音、特效、技能冷却、等等)
 	//已经在敌人身上定义完成，这是操作是为了实现在玩家身上定义
 	InitAbilityActorInfo();
+	//初始化角色能力
+	AddCharacterAbilities();
 }
 
 

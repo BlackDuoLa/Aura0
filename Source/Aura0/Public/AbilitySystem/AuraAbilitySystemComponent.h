@@ -6,7 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AuraAbilitySystemComponent.generated.h"
 
-//创建一个Tag委托
+//创建一个Tag动态多播委托
 DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags,const FGameplayTagContainer&)
 
 
@@ -19,7 +19,12 @@ public:
 
 	void AbilityActorInfoSet();
 
+
+	//关于Tag的动态多播委托
 	FEffectAssetTags EffectAssetTags;
+
+	//获取添加的能力系统
+	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
 
 protected:
 

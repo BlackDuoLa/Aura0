@@ -11,6 +11,7 @@
 class UAbilitySystemComponent;
 class UAttributeSet;
 class UGameplayEffect;
+class UGameplayAbility;
 
 UCLASS(Abstract)
 class AURA0_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface ,public ICombatInterface
@@ -61,6 +62,18 @@ protected:
 	//在角色身上添加GE系统可配置角色属性面板
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect>GameplayEffectClass, float Level) const;
 	void InitializeDefaultAttributes()const;
+
+
+	//添加能力系统函数
+	void AddCharacterAbilities();
+
+
+private:
+
+	//玩家角色的能力系统
+	UPROPERTY(EditAnywhere,Category="Ability")
+	TArray < TSubclassOf<UGameplayAbility>>StartupAbilities;
+
 
 
 

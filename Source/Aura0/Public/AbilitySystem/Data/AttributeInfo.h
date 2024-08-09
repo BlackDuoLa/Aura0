@@ -29,7 +29,7 @@ struct FAuraAttributeInfo
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText AttributeDescription = FText();
 
-	//玩家属性数值
+	//玩家属性数值，因为玩家属性的数值在其他地方定义了，这里不需要玩家在控制面板在次定义
 	UPROPERTY(BlueprintReadOnly)
 	float AttributeValue = 0.f;
 
@@ -45,11 +45,11 @@ class AURA0_API UAttributeInfo : public UDataAsset
 
 public:
 
-	//创建绑定结构体函数
-	FAuraAttributeInfo FindAttributeInfoForTag(const FGameplayTag& AttributeTag, bool bLogNotFound)const;
+	//创建关于绑定Tag结构体函数
+	FAuraAttributeInfo FindAttributeInfoForTag(const FGameplayTag& AttributeTag, bool bLogNotFound = false)const;
 
 
-	
+	//创造玩家属性消息的容器
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FAuraAttributeInfo>AttributeInformation;
 

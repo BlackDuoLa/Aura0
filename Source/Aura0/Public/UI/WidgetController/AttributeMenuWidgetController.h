@@ -32,17 +32,22 @@ public:
 	FAttributeInfoSignature AttributeInfoDelegate;
 
 
+
+	
+
 protected:
 
 	//创建玩家接口结构体，需要在蓝图中添加定义
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo>AttributeInfo;
 
+
+
+	//void BroadcastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute) const;
+
 private:
 
-	//void BroadcastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute);
-
-
+	
 
 
 };
