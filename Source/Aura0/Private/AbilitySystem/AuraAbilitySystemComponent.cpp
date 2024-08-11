@@ -3,17 +3,13 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGameplayTags.h"
+#include "AbilitySystem/Abilities/AuraGameplayAbility.h"
 
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
-
 	//OnGameplayEffectAppliedDelegateToSelf这是ASC自带的广播函数
 	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectApplied);
-
-	
-
-
 
 }
 
@@ -21,18 +17,58 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 {
 
 	//遍历 StartupAbilities 容器中的每一个元素，并将每个元素赋值给 AbilityClass 变量
-	for (TSubclassOf<UGameplayAbility>AbilityClass:StartupAbilities)
+	for (TSubclassOf<UGameplayAbility>AbilityClass : StartupAbilities)
 	{
-		//创建等级为1的能力
+		//创建等级为1的技能
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		if (const UAuraGameplayAbility* AuraAbility = Cast<UAuraGameplayAbility>(AbilitySpec.Ability))
+		{
+			AbilitySpec.DynamicAbilityTags.AddTag(AuraAbility->StartupInputTag);
+			GiveAbility(AbilitySpec);
 
-		//GiveAbility(AbilitySpec);
-		
-		//授予角色该能力并立即激活一次
-		GiveAbilityAndActivateOnce(AbilitySpec);
+		}
 
 	}
+}
 
+void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
+{
+	//按下按键，检测按键绑定的Tag，并激活Tag所绑定的技能
+	//判断是否是无效的，是有效的就通过，无效的就返回
+	if (!InputTag.IsValid())return;
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		//判断传进来的Tag是否已经存在
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+
+			AbilitySpecInputPressed(AbilitySpec);
+			//判断按键是否激活
+			if (!AbilitySpec.IsActive())
+
+			{
+				//激活能力
+				TryActivateAbility(AbilitySpec.Handle);
+
+			}
+		}
+	}
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
+{
+
+	if (!InputTag.IsValid())return;
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		//判断传进来的Tag是否已经存在
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+
+			AbilitySpecInputReleased(AbilitySpec);
+
+		}
+	}
 
 
 }

@@ -1,12 +1,25 @@
 #include "Player/AuraPlayerControllerBase.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
+#include "Input/AuraInputComponent.h"
+#include "Components/SplineComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AuraGameplayTags.h"
+
+
+
 
 
 AAuraPlayerControllerBase::AAuraPlayerControllerBase()
 {
 	//启用复制：要使一个 Actor 进行复制，需要在类的构造函数中设置 bReplicates 属性为 true。
 	bReplicates = true;
+
+
+	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
+
+
+
 }
 
 //每帧执行函数
@@ -74,6 +87,85 @@ void AAuraPlayerControllerBase::CursorTrace()
 
 }
 
+//控制键是否按压
+void AAuraPlayerControllerBase::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+	{
+		bTargeting = ThisActor ? true : false;
+		bAutoRunning = false;
+
+	}
+	
+}
+
+//控制键是否松开按压
+void AAuraPlayerControllerBase::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (GetASC() == nullptr)return;
+	GetASC()->AbilityInputTagReleased(InputTag);
+
+}
+//按压完成
+void AAuraPlayerControllerBase::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+
+	//判断传入的按键，绑定的Tag，是否为InputTag_LMB
+	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+	{
+	
+		if (GetASC())
+		{
+			GetASC()->AbilityInputTagHeld(InputTag);
+
+		}
+		return;
+	}
+	if (bTargeting)
+	{
+		if (GetASC())
+		{
+			GetASC()->AbilityInputTagHeld(InputTag);
+
+		}
+
+	}
+	else
+	{
+
+		FollowTime += GetWorld()->GetDeltaSeconds();
+		FHitResult Hit;
+		//获取到鼠标点击的位置
+		if(GetHitResultUnderCursor(ECC_Visibility,false,Hit))
+		{
+			CacheDestination = Hit.ImpactPoint;
+		}
+
+		//玩家向获取到的位置移动
+		if (APawn* ControlledPawn = GetPawn())
+		{
+			const FVector WorldDirection = (CacheDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+			ControlledPawn->AddMovementInput(WorldDirection);
+		}
+
+	}
+
+
+
+}
+
+
+UAuraAbilitySystemComponent* AAuraPlayerControllerBase::GetASC()
+{
+	//确保玩家在转换UAuraAbilitySystemComponent的时候只执行一次
+	//不用每次执行都转换一次，可以优化代码
+	if (AuraAbilitySystemComponent == nullptr)
+	{
+		AuraAbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return AuraAbilitySystemComponent;
+}
+
 //游戏一开始执行事件
 void AAuraPlayerControllerBase::BeginPlay()
 {
@@ -108,14 +200,26 @@ void AAuraPlayerControllerBase::BeginPlay()
 
 }
 
-//玩家控制器
+//获取到玩家的设置按键消息，并对按键进行初始化匹配
 void AAuraPlayerControllerBase::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	//把控制器转换成角色控制
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+
+	//创建UAuraInputComponent的智能指针，并检测InputComponent是否也是UAuraInputComponent的智能指针
+	UAuraInputComponent * AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 	//当玩家按下控制器定义好的WASD就映射到Move函数上
-	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered, this, &AAuraPlayerControllerBase::Move);
+	AuraInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered, this, &AAuraPlayerControllerBase::Move);
+
+	//当玩家按下操作键，激活相应的操作
+	//获取玩家的按键操作并执行AuraInputComponent中的BindAbilityActions函数,把需要执行消息传递过去并激活相应的函数
+	AuraInputComponent->BindAbilityActions(InputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
+	 
+
+
+
+
+
+
 }
 
 	//对玩家控制器按键进行赋值

@@ -5,7 +5,7 @@
 #include "GameplayTagContainer.h"
 #include "AuraInputConfig.generated.h"
 
-
+//按键绑定结构体
 USTRUCT(BlueprintType)
 struct FAuraInputAction
 {
@@ -34,7 +34,7 @@ public:
 	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound = false)const;
 
 
-	//创建输入的一个容器
+	//创建输入按键的一个容器
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TArray<FAuraInputAction>AbilityInputAction;
 

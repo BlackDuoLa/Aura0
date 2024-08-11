@@ -33,6 +33,7 @@ UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+//玩家等级同步
 void AAuraPlayerState::OnRep_Level(int32 Oldlevel)
 {
 
