@@ -56,6 +56,10 @@ private:
 	//储存鼠标当前的状态
 	IEnemyInterface* ThisActor;
 
+	//FHitResult 是一个用于处理碰撞检测结果的结构体
+	// 通过射线检测，你可以确定玩家点击的位置，并获取点击对象的详细信息。
+	// 这在很多游戏机制中非常有用，例如物体选择、交互和射击等。
+	FHitResult CursorHit;
 
 	//设置控制键是否按压函数
 	void AbilityInputTagPressed(FGameplayTag InputTag);
@@ -77,18 +81,26 @@ private:
 
 
 
+	//存储鼠标点击的位置
 	FVector CacheDestination = FVector::ZeroVector;
+	// 用于查看按住了多久
 	float FollowTime = 0.f;
-	float ShortPressThreshold = 0.5f;
+	//当前是否自动移动
 	bool bAutoRunning = false;
+	//当前鼠标是否选中敌人
 	bool bTargeting = false;
-
 	UPROPERTY(EditDefaultsOnly)
-	float AutoRunAccceptanceRadius = 50.f;
+	float ShortPressThreshold = 0.5f;//定义鼠标悬停多长时间内算点击事件
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAccceptanceRadius = 50.f; //当角色和目标距离在此半径内时，将关闭自动寻路
 
-	//玩家移动的样条变量
+	//自动寻路时生成的样条线
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr< USplineComponent>Spline;
+
+
+	void AutoRun();
+
 
 	
 };
