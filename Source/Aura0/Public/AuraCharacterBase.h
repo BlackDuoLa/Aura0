@@ -33,6 +33,14 @@ protected:
 	UPROPERTY(EditAnywhere,Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent>Weapon;
 
+	//武器插槽
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName WeaponTipSockeName;
+
+	//武器接口
+	virtual FVector GetCombatSocketLocation()override;
+
+
 	//能力系统组件
 	//在基类初始化的属性同步模式(血量、蓝量、体力、声音、特效、技能冷却、等等)
 	UPROPERTY()
