@@ -4,12 +4,19 @@
 #include "AuraCharacterBase.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem\AuraAbilitySystemComponent.h"
+#include "Aura0\Aura0.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile,ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 
 
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
@@ -50,9 +57,11 @@ void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 {
 
 	//申请GE添加属性到自身
+	//获取到AbilitySystemComponent
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 	check(IsValid(ASC));
 	check(GameplayEffectClass);
+	//
 	FGameplayEffectContextHandle ContextHandle = ASC->MakeEffectContext();
 	ContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(GameplayEffectClass, Level, ContextHandle);
@@ -63,7 +72,7 @@ void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 
 void AAuraCharacterBase::InitializeDefaultAttributes() const
 {
-	//
+	//把添加的GE类型传递过去，并设置初始值为1
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);

@@ -23,8 +23,8 @@ public:
 		//不沟边
 		virtual  void UnHightLightActor() override;
 
-		//
-
+		
+		//覆盖CombatInterface类的获取等级虚拟函数
 		virtual int32 GetPlayerLevel() override;
 
 		protected:

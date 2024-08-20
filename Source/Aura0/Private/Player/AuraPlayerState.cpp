@@ -24,6 +24,9 @@ void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	//DOREPLIFETIME是用于自动处理属性复制的一个宏，手动添加了属性到数组中
+	//将 AAuraPlayerState 类的 Level 属性标记为需要在网络复制的生命周期属性
+	//实现就是将Level属性注册到服务器，在服务器有改动时，会自动复制到本地
 	DOREPLIFETIME(AAuraPlayerState, Level);
 
 }
@@ -33,7 +36,7 @@ UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-//玩家等级同步
+//玩家玩家等级被复制时会同时运行这个函数
 void AAuraPlayerState::OnRep_Level(int32 Oldlevel)
 {
 

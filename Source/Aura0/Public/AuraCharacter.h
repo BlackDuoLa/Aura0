@@ -22,7 +22,7 @@ public:
 		virtual void PossessedBy(AController*NewController) override;
 		virtual void OnRep_PlayerState()override;
 
-
+		//覆盖CombatInterface类的获取等级虚拟函数
 		virtual int32 GetPlayerLevel() override;
 
 

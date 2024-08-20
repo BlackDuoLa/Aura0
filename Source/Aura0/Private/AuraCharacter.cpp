@@ -54,6 +54,7 @@ int32 AAuraCharacter::GetPlayerLevel()
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
+	//获取PlayerState，然后调用函数返回等级数值
 	return AuraPlayerState->GetPlayerLevel();
 }
 

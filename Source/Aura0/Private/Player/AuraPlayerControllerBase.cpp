@@ -115,22 +115,15 @@ void AAuraPlayerControllerBase::AbilityInputTagReleased(FGameplayTag InputTag)
 
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-
 		if (GetASC())GetASC()->AbilityInputTagReleased(InputTag);
-
 		return;
 	}
 
-	if (bTargeting)
-	{
-		if (GetASC())GetASC()->AbilityInputTagReleased(InputTag);
-		
-	}
-	else
-
+	if (GetASC())GetASC()->AbilityInputTagReleased(InputTag);
+	if (!bTargeting && !bShiftKeyDown)
 	{
 		const APawn* ControlledPawn = GetPawn();
-		if (FollowTime <= ShortPressThreshold&&ControlledPawn)
+		if (FollowTime <= ShortPressThreshold && ControlledPawn)
 		{
 			//内置的插件去拾取自动寻路的路线（传入自身，起始点，结束点）
 			//如果查询的到将返回一个UNavigationPath存入NavPath中
@@ -143,7 +136,7 @@ void AAuraPlayerControllerBase::AbilityInputTagReleased(FGameplayTag InputTag)
 				{
 					//将新的位置添加到样条曲线中
 					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
+					//DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
 
 				}
 				//自动寻路将最终目的地设置为导航的终点，方便停止导航
@@ -153,7 +146,9 @@ void AAuraPlayerControllerBase::AbilityInputTagReleased(FGameplayTag InputTag)
 
 			}
 		}
-		
+		FollowTime = 0.f;
+		bTargeting = false;
+
 	}
 
 }
@@ -170,7 +165,7 @@ void AAuraPlayerControllerBase::AbilityInputTagHeld(FGameplayTag InputTag)
 		if (GetASC())GetASC()->AbilityInputTagHeld(InputTag);
 		return;
 	}
-	if (bTargeting)
+	if (bTargeting||bShiftKeyDown)
 	{
 		if (GetASC())GetASC()->AbilityInputTagHeld(InputTag);
 
@@ -249,6 +244,10 @@ void AAuraPlayerControllerBase::SetupInputComponent()
 	UAuraInputComponent * AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 	//当玩家按下控制器定义好的WASD就映射到Move函数上
 	AuraInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered, this, &AAuraPlayerControllerBase::Move);
+	//玩家开始按压执行ShiftPressed函数
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AAuraPlayerControllerBase::ShiftPressed);
+	//玩家开始按压执行ShifReleased函数
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AAuraPlayerControllerBase::ShifReleased);
 
 	//当玩家按下操作键，激活相应的操作
 	//获取玩家的按键操作并执行AuraInputComponent中的BindAbilityActions函数,把需要执行消息传递过去并激活相应的函数

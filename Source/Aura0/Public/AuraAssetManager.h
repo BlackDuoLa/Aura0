@@ -6,9 +6,8 @@
 #include "Engine/AssetManager.h"
 #include "AuraAssetManager.generated.h"
 
-/**
- * 
- */
+
+
 UCLASS()
 class AURA0_API UAuraAssetManager : public UAssetManager
 {

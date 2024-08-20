@@ -1,5 +1,5 @@
 // 创建MMC实现对最大血量和最大蓝量基于等级升级
-
+//MMC 全称 Mod Magnitude Calculation，为自定义计算数值的类，可以使用蓝图继承，也可以使用c++继承，在这个项目里面我们使用的c++实现。
 #pragma once
 
 #include "CoreMinimal.h"

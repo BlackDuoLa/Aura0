@@ -43,6 +43,14 @@ private:
 	//添加输入操作
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction>MoveAction;
+	//添加切换操作
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction>ShiftAction;
+
+
+	void ShiftPressed() { bShiftKeyDown = true; }
+	void ShifReleased() { bShiftKeyDown = false; }
+	bool bShiftKeyDown = false;
 
 	//移动函数
 	void Move(const FInputActionValue& InputActionValue);
