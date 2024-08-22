@@ -1,7 +1,9 @@
 #include "AuraEnemy.h"
 #include "AbilitySystem\AuraAbilitySystemComponent.h"
 #include "AbilitySystem\AuraAttributeSet.h"
+#include "Components/WidgetComponent.h"
 #include "Aura0\Aura0.h"
+#include "UI/Widget/AuraUserWidget.h"
 
 
 AAuraEnemy::AAuraEnemy()
@@ -18,6 +20,9 @@ AAuraEnemy::AAuraEnemy()
 	//属性集
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 
+	//创建伤害显示UI
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(GetRootComponent());
 }
 
 
@@ -50,8 +55,48 @@ void AAuraEnemy::BeginPlay()
 	Super::BeginPlay();
 	//check(AbilitySystemComponent);
 	//初始化，谁拥有这个代理，谁是代理都是本身This（敌人比较简单）
-
 	InitAbilityActorInfo();
+
+	if (UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		AuraUserWidget->SetWidgetController(this);
+
+	}
+
+
+
+	//给广播敌人的生命值
+	if (const UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+
+			
+				OnHealthChanged.Broadcast(Data.NewValue);
+
+			}
+		);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+			
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+				
+			}
+		);
+		//因为敌人的生命属性绑定的是玩家的生命属性，所以这里也获取定义好的玩家的生命属性
+		OnHealthChanged.Broadcast(AuraAS->GetHealth());
+		OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
+
+
+
+
+	}
+
+
+
+
 
 }
 
@@ -59,5 +104,8 @@ void AAuraEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+	//初始化敌人属性
+	InitializeDefaultAttributes();
 
 }

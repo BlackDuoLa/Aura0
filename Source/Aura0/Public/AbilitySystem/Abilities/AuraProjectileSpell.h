@@ -25,10 +25,12 @@ protected:
 	UFUNCTION(BlueprintCallable,Category = "Projectile")
 	void SpawnProjectile(const FVector& ProjectileTargetLocation);
 
-	//
+	//设置生成的物体是什么
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AAuraProjectile>ProjectileClass;
 
-
+	//设置火球伤害
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect>DamageEffectClass;
 	
 };

@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameplayEffectTypes.h"
 #include "AuraProjectile.generated.h"
 
 
@@ -25,7 +26,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
 
-
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpwn = true))
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;
 
 
 protected:
@@ -57,7 +59,7 @@ private:
 	//ª«Ú∑¢…‰“Ù–ß
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundBase>LoopingSound;
-
+	//…Ë÷√
 	UPROPERTY()
 	TObjectPtr<UAudioComponent>LoopingSoundComponent;
 
