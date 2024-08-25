@@ -142,6 +142,21 @@ public:
 	FGameplayAttributeData ManaRegeneration;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, ManaRegeneration);
 
+	//创建角色的最大生命值
+	//当（MaxHealth）变化的时候就执行（OnRep_MaxHealth）这个函数
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
+
+
+	//创建角色的最大法术值
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
+	FGameplayAttributeData MaxMana;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
+
+
+
+
 
 	//创建角色的生命值
 	//当（Health）变化的时候就执行（OnRep_Health）这个函数
@@ -155,17 +170,17 @@ public:
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
 
 
-	//创建角色的最大生命值
-	//当（MaxHealth）变化的时候就执行（OnRep_MaxHealth）这个函数
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
-	FGameplayAttributeData MaxHealth;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
 
 
-	//创建角色的最大法术值
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
-	FGameplayAttributeData MaxMana;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
+	/*
+		Meta Attributes
+	*/
+	//设置伤害数值
+	UPROPERTY(BlueprintReadOnly,Category = "Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingDamage);
+
+
 
 
 	//设置各个属性的网络同步

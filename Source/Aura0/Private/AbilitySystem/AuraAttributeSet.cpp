@@ -146,6 +146,25 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	}
 
 
+	//进行伤害设置
+	if(Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		//创建一个LocalIncomingDamage储存传进来的值
+		const float LocalIncomingDamage = GetIncomingDamage();
+		//初始化伤害值为0
+		SetIncomingDamage(0.f);
+		//判断设置的伤害数值是否大于0
+		if (LocalIncomingDamage > 0.f)
+		{
+			//创建一个NewHealth用来储存，生命减少后的值
+			const float NewHealth = GetHealth() - LocalIncomingDamage;
+
+			//更新生命值最大值不能大于最大值，最小值不能小于0
+			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+			//检测生命是否小于等于0
+			const bool bFatal = NewHealth <= 0.f;
+		}
+	}
 }
 
 
