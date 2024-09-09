@@ -18,12 +18,13 @@ class AURA0_API UAuraGameplayAbility : public UGameplayAbility
 public:
 
 
-
+	//创建设置玩家的输入Tag
 	UPROPERTY(EditDefaultsOnly,Category = "Input")
 	FGameplayTag StartupInputTag;
 
-
-
+	//创建火球的曲线伤害
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = "Damage")
+	FScalableFloat Damage;
 
 
 

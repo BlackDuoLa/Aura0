@@ -48,7 +48,7 @@ public:
 	FGameplayTag InputTag_3;
 	FGameplayTag InputTag_4;
 	
-	//
+	//…À∫¶±Í«©
 	FGameplayTag Damage;
 
 
