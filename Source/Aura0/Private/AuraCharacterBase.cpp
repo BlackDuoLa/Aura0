@@ -33,6 +33,41 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
+void AAuraCharacterBase::Die()
+{
+
+	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+
+	MulticastHandleDeath();
+
+
+
+}
+//NetMulticast设置后，这个函数被调用时，将在服务器执行，然后复制到每个客户端。
+// 和它对应的还有（Server：只在服务器运行，Client：只在调用此函数的客户端运行）这种情况的函数实现需要在后面加上_Implementation
+void AAuraCharacterBase::MulticastHandleDeath_Implementation()
+{
+	Weapon->SetSimulatePhysics(true);//开启模拟物理效果
+	Weapon->SetEnableGravity(true);//开启重力效果
+	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);//开启物理碰撞通道
+
+
+	GetMesh()->SetSimulatePhysics(true);//开启模拟物理效果
+	GetMesh()->SetEnableGravity(true);//开启重力效果
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);//开启物理碰撞通道
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);//开启角色与静态物体产生碰撞
+
+	///关闭角色碰撞体通道，避免对武器和角色模拟物理效果产生影响
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+
+}
+
 // Called when the game starts or when spawned
 void AAuraCharacterBase::BeginPlay()
 {

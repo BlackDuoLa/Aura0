@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "AuraCharacterBase.h"
-#include "interaction\EnemyInterface.h"//添加的沟边接口
+#include "interaction/EnemyInterface.h"//添加的沟边接口
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "AuraEnemy.generated.h"
@@ -31,6 +31,7 @@ public:
 		
 		//覆盖CombatInterface类的获取等级虚拟函数
 		virtual int32 GetPlayerLevel() override;
+		virtual void Die()override;
 
 		//创建敌人生命属性
 		UPROPERTY(BlueprintAssignable)
@@ -39,6 +40,21 @@ public:
 		UPROPERTY(BlueprintAssignable)
 		FOnAttributeChangedSignature OnMaxHealthChanged;
 
+
+		void HitReactTagChanged(const FGameplayTag CallbackTag ,int32 NewCount);
+
+
+		//
+		UPROPERTY(BlueprintReadOnly,Category = "Combat")
+		bool bHitReacting = false;
+
+		//创建敌人初始速度为250
+		UPROPERTY(BlueprintReadOnly, Category = "Combat")
+		float BaseWalkSpeed = 250.f;
+
+		//角色在死亡后几秒后消失
+		UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Combat")
+		float LifeSpan = 5.f;
 
 		protected:
 			//virtual用于定义虚函数、继承类中被重写（覆盖）的函数
@@ -63,6 +79,6 @@ public:
 			TObjectPtr<UWidgetComponent>HealthBar;
 
 
-
+		
 
 };

@@ -1,11 +1,12 @@
 #include "AuraEnemy.h"
-#include "AbilitySystem\AuraAbilitySystemComponent.h"
-#include "AbilitySystem\AuraAttributeSet.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Components/WidgetComponent.h"
-#include "Aura0\Aura0.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Aura0/Aura0.h"
 #include "UI/Widget/AuraUserWidget.h"
-#include <AbilitySystem\AuraAbilitySystemLibrary.h>
-
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "AuraGameplayTags.h"
 
 AAuraEnemy::AAuraEnemy()
 {
@@ -51,12 +52,31 @@ int32 AAuraEnemy::GetPlayerLevel()
 	return Level;
 }
 
+void AAuraEnemy::Die()
+{
+	//角色消除设置，时间为LifeSpan=5s，当角色触发死亡后就会在5秒后消除
+	SetLifeSpan(LifeSpan);
+	Super::Die();
+
+
+}
+
+
+
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	//游戏一开始设置敌人的移动速度为
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
 	//check(AbilitySystemComponent);
 	//初始化，谁拥有这个代理，谁是代理都是本身This（敌人比较简单）
 	InitAbilityActorInfo();
+
+	//一开始把数据传入过去
+	UAuraAbilitySystemLibrary::GiveStartupAbilites(this, AbilitySystemComponent);
+
+
+
 
 	if (UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
@@ -86,6 +106,16 @@ void AAuraEnemy::BeginPlay()
 				
 			}
 		);
+
+
+		//注册标签事件,当标签移除或添加都会执行绑定的函数
+		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact, EGameplayTagEventType::NewOrRemoved).AddUObject(
+			this,
+			&AAuraEnemy::HitReactTagChanged
+		);
+
+
+
 		//因为敌人的生命属性绑定的是玩家的生命属性，所以这里也获取定义好的玩家的生命属性
 		OnHealthChanged.Broadcast(AuraAS->GetHealth());
 		OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
@@ -94,12 +124,22 @@ void AAuraEnemy::BeginPlay()
 
 
 	}
+}
 
+void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
 
+	//创建bHitReacting检测是否为0
+	bHitReacting = NewCount > 0;
 
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
 
 
 }
+
+
+
+
 
 void AAuraEnemy::InitAbilityActorInfo()
 {

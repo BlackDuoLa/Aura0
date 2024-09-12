@@ -13,6 +13,12 @@ class UCombatInterface : public UInterface
 	GENERATED_BODY()
 };
 
+
+class UAnimMontage;
+
+
+
+
 class AURA0_API ICombatInterface
 {
 	GENERATED_BODY()
@@ -28,4 +34,12 @@ public:
 	//设置角色攻击时旋转函数（该函数在角色中作为自定义函数使用）
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void UpdateFacingTarget(const FVector& Target);
+
+
+	//创建可在蓝图中执行的，角色被击中是动画函数
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	UAnimMontage* GetHitReactMontage();
+
+	virtual void Die() = 0;
+
 };

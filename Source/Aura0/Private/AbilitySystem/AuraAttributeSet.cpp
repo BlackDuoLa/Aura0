@@ -7,6 +7,7 @@
 #include "Net/UnrealNetwork.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGameplayTags.h"
+#include "interaction/CombatInterface.h"
 
 
 UAuraAttributeSet::UAuraAttributeSet()
@@ -166,6 +167,30 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 			//检测生命是否小于等于0
 			const bool bFatal = NewHealth <= 0.f;
+
+			if (bFatal)
+			{
+				
+				//调用死亡函数
+				ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
+				if (CombatInterface)
+				{
+					//消除死亡的敌人
+					CombatInterface->Die();
+				}
+			
+
+
+			}
+			else
+			{
+				//触发角色受到攻击动画
+				FGameplayTagContainer TagContainer;
+				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
+				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+
+			}
+
 		}
 	}
 }

@@ -51,6 +51,9 @@ public:
 	//ÉËº¦±êÇ©
 	FGameplayTag Damage;
 
+	//¹¥»÷½©Ö±
+	FGameplayTag Effects_HitReact;
+
 
 
 protected:

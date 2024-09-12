@@ -9,6 +9,7 @@
 
 
 class UGameplayEffect;
+class UGameplayAbility;
 
 UENUM(BlueprintType)
 enum class ECharacterClass : uint8
@@ -52,12 +53,19 @@ public:
 	TMap<ECharacterClass, FCharacterClassDefaultInfo>CharacterClassInformation;
 
 	//敌人的次要属性
-	UPROPERTY(EditDefaultsOnly, Category = "Class Defaults")
+	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
 	TSubclassOf<UGameplayEffect>SecondaryAttributes;
 
 	//敌人的基础属性（生命力、法力）
-	UPROPERTY(EditDefaultsOnly, Category = "Class Defaults")
+	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
 	TSubclassOf<UGameplayEffect>VitalAttributes;
+
+
+	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
+	TArray<TSubclassOf<UGameplayAbility>>CommonAbilities;
+
+
+
 
 	//通过枚举获取对应的初始化类
 	FCharacterClassDefaultInfo GetClassDefaultInfo(ECharacterClass CharacterClass);

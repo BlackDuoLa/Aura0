@@ -58,6 +58,7 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 
 
 		FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
+
 		//玩家等级和伤害进行同步，玩家多少级对等到伤害多少级（伤害为多少）
 		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
 

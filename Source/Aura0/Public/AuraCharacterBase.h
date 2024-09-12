@@ -24,6 +24,15 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
+	//获取CombatInterface中定义的角色被击中是的动画函数
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	//死亡判定
+	virtual void Die() override;
+
+	UFUNCTION(NetMulticast,Reliable)
+	virtual void MulticastHandleDeath();
+
+
 protected:
 	
 	virtual void BeginPlay() override;
@@ -82,8 +91,9 @@ private:
 	UPROPERTY(EditAnywhere,Category="Ability")
 	TArray < TSubclassOf<UGameplayAbility>>StartupAbilities;
 
-
-
+	//创建角色被击中动画
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<UAnimMontage>HitReactMontage;
 
 
 };
