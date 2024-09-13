@@ -9,7 +9,8 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "Interaction/EnemyInterface.h"
-
+#include "GameFramework/Character.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 
 
@@ -40,6 +41,26 @@ void AAuraPlayerControllerBase::PlayerTick(float DeltaTime)
 
 	//自动寻路
 	AutoRun();
+
+}
+
+//敌人受击伤害显示
+void AAuraPlayerControllerBase::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+{
+	
+	if (IsValid(TargetCharacter) && DamageTextComponentClass)
+	{
+
+		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+		DamageText->RegisterComponent();
+		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
+		DamageText->SetDamageText(DamageAmount);
+
+
+	}
+
 
 }
 

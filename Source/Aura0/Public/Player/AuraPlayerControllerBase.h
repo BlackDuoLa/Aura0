@@ -15,6 +15,7 @@ class IEnemyInterface;
 class UAuraInputConfig;
 class UAuraAbilitySystemComponent;
 class USplineComponent;
+class UDamageTextComponent;
 
 UCLASS()
 class AURA0_API AAuraPlayerControllerBase : public APlayerController
@@ -27,6 +28,10 @@ public:
 
 		//重写的每帧执行
 		virtual void PlayerTick(float DeltaTime)override;
+
+		//创建蓝图传递的敌人搜到伤害的数据
+		UFUNCTION(Client,Reliable)
+		void ShowDamageNumber(float DamageAmount,ACharacter * TargetCharacter);
 	
 
 protected:
@@ -110,5 +115,8 @@ private:
 	void AutoRun();
 
 
+	//创建传入的伤害UI界面
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent>DamageTextComponentClass;
 	
 };

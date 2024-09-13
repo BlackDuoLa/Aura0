@@ -8,6 +8,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGameplayTags.h"
 #include "interaction/CombatInterface.h"
+#include "Player/AuraPlayerControllerBase.h"
+#include "Kismet/GameplayStatics.h"
 
 
 UAuraAttributeSet::UAuraAttributeSet()
@@ -128,6 +130,8 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 }
 
 
+
+
 void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
@@ -190,6 +194,28 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 
 			}
+
+
+			//显示伤害，把伤害数值传递过去
+			ShowFloatingText(Props, LocalIncomingDamage);
+
+
+
+
+		}
+	}
+}
+
+//显示伤害函数
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+{
+	if (Props.SourceCharacter != Props.TargetCharacter)
+	{
+
+		if (AAuraPlayerControllerBase* PC = Cast<AAuraPlayerControllerBase>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
+		{
+
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
 
 		}
 	}
