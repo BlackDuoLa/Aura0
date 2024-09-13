@@ -85,6 +85,29 @@ protected:
 	void AddCharacterAbilities();
 
 
+
+	//创建角色死亡溶解函数
+	void Dissolve();
+
+	//蓝图中执行角色溶解函数
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartDissolveTimeline(UMaterialInstanceDynamic*DynamicMaterialInstance);
+
+	//蓝图中执行武器溶解函数
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartWeaponDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
+
+
+	//创建角色材质实例（用于角色死亡溶解效果）
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance>DissolveMaterialInstance;
+
+
+	//创建武器材质实例（用于角色死亡溶解效果）
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance>WeaponDissolveMaterialInstance;
+
+
 private:
 
 	//玩家角色的能力系统

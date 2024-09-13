@@ -66,6 +66,10 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 
+	//死亡后执行死亡溶解效果
+	Dissolve();
+
+
 }
 
 // Called when the game starts or when spawned
@@ -133,6 +137,30 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	//把获取到的GA消息，传递到ASC中
 	AuraASC->AddCharacterAbilities(StartupAbilities);
 
+
+
+}
+
+void AAuraCharacterBase::Dissolve()
+{
+	//判断角色材质是否有效（是否添加进来）
+	if (IsValid(DissolveMaterialInstance))
+	{
+		UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
+		GetMesh()->SetMaterial(0, DynamicMatInst);
+		StartDissolveTimeline(DynamicMatInst);
+
+	}
+
+	//判断武器材质是否有效（是否添加进来）
+	if (IsValid(WeaponDissolveMaterialInstance))
+	{
+
+		UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(WeaponDissolveMaterialInstance, this);
+		Weapon->SetMaterial(0, DynamicMatInst);
+		StartWeaponDissolveTimeline(DynamicMatInst);
+
+	}
 
 
 }
