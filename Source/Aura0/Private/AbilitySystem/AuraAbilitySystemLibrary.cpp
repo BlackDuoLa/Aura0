@@ -50,10 +50,9 @@ UAttributeMenuWidgetController* UAuraAbilitySystemLibrary::GetAttributeMenuWidge
 void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldContextObject,ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC)
 {
 
-	AAura0GameModeBase* Aura0GameMode = Cast<AAura0GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (Aura0GameMode == nullptr)return;
 
-	UCharacterClassInfo* CharacterClassInfo = Aura0GameMode->CharacterClassInfo;
+
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	const FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 	
 	//应用主要属性
@@ -80,10 +79,9 @@ void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* World
 
 void UAuraAbilitySystemLibrary::GiveStartupAbilites(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
 {
-	AAura0GameModeBase* Aura0GameMode = Cast<AAura0GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (Aura0GameMode == nullptr)return;
 
-	UCharacterClassInfo* CharacterClassInfo = Aura0GameMode->CharacterClassInfo;
+
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	for(TSubclassOf<UGameplayAbility>AbilityClass:CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilityySpec = FGameplayAbilitySpec(AbilityClass, 1);
@@ -93,5 +91,18 @@ void UAuraAbilitySystemLibrary::GiveStartupAbilites(const UObject* WorldContextO
 
 
 	}
+
+}
+
+UCharacterClassInfo* UAuraAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+
+	AAura0GameModeBase* Aura0GameMode = Cast<AAura0GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (Aura0GameMode == nullptr)return nullptr;
+
+	return Aura0GameMode->CharacterClassInfo;
+
+
+
 
 }

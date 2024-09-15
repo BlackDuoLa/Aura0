@@ -60,12 +60,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
 	TSubclassOf<UGameplayEffect>VitalAttributes;
 
-
+	//敌人受击动画逻辑
 	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
 	TArray<TSubclassOf<UGameplayAbility>>CommonAbilities;
 
-
-
+	//敌人受伤运算，数据表格
+	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults|Damage")
+	TObjectPtr<UCurveTable>DamageCalculationCoefficients;
 
 	//通过枚举获取对应的初始化类
 	FCharacterClassDefaultInfo GetClassDefaultInfo(ECharacterClass CharacterClass);

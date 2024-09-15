@@ -8,13 +8,13 @@
 
 UMMC_MaxHealth::UMMC_MaxHealth()
 {
-	//获取的Vigor属性对象
+	//设置获取的Vigor属性对象
 	VigorDef.AttributeToCapture = UAuraAttributeSet::GetVigorAttribute();
 	//设置VigorDef的应用为Target
 	VigorDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
 	VigorDef.bSnapshot = false;
 
-	//添加到捕获VigorDef数值，只有添加到列表
+	//添加到捕获VigorDef数值，只有添加到列表，才回去获取属性
 	RelevantAttributesToCapture.Add(VigorDef);
 
 
@@ -41,6 +41,7 @@ float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffec
 
 	
 	//Spec.GetContext().GetSourceObject()获取触发或应用当前效果的对象
+	//获取等级
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(Spec.GetContext().GetSourceObject());
 	const int32 PlayerLevel = CombatInterface->GetPlayerLevel();
 

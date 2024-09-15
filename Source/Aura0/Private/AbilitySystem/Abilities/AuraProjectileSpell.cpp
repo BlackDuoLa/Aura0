@@ -53,6 +53,22 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 
 
 		const UAbilitySystemComponent*SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+
+
+		FGameplayEffectContextHandle EffectContextHandle = SourceASC->MakeEffectContext();
+		EffectContextHandle.SetAbility(this);//设置技能
+		EffectContextHandle.AddSourceObject(Projectile);//设置GE的源
+		//添加Actor列表
+		TArray<TWeakObjectPtr<AActor>>Actors;
+		Actors.Add(Projectile);
+		EffectContextHandle.AddActors(Actors);
+		//添加命中结果
+		FHitResult HirResult;
+		HirResult.Location = ProjectileTargetLocation;
+		EffectContextHandle.AddHitResult(HirResult);
+		//添加技能触发位置
+		EffectContextHandle.AddOrigin(ProjectileTargetLocation);
+
 		const  FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
 
 
@@ -62,7 +78,7 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		//玩家等级和伤害进行同步，玩家多少级对等到伤害多少级（伤害为多少）
 		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
 
-		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, 50.f);
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, 20);
 
 
 		Projectile->DamageEffectSpecHandle = SpecHandle;
