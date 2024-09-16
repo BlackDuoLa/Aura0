@@ -5,6 +5,7 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AuraGameplayTags.h"
 #include "interaction/CombatInterface.h"
+#include "AuraAbilityTypes.h"
 
 //这里结构体不加F是因为它是内部结构体，不需要外部获取，也不需要在蓝图中使用
 struct AuraDamageStatics
@@ -94,9 +95,6 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	
 
 
-
-
-
 	//获取目标的格挡值，并控制格挡值不能小于0
 	float TargetBlockChance = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef, EvaluationParameters, TargetBlockChance);
@@ -104,6 +102,14 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	//通过随机数判断是否格挡值
 	const bool bBlocked = FMath::RandRange(1, 100) < TargetBlockChance ;
+
+	//获取序列化的格挡属性，并把是否格挡数据传递过去
+	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+	UAuraAbilitySystemLibrary::SetIsBlockedHit(EffectContextHandle, bBlocked);
+
+
+
+
 	Damage = bBlocked ? Damage / 2.f : Damage;
 
 
@@ -160,6 +166,10 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	//源的暴击率 - 目标的暴击抗性 = 最终暴击率，通过随机数判断是否暴击
 	const float EffectiveCriticalHitChance = SourceCriticalHitChance - TargetCriticalHitResistance * CriticalHitResistanCeffecient;
 	const bool bCriticalHit = FMath::RandRange(1, 100) < EffectiveCriticalHitChance;
+
+
+	//把是否暴击数据传递过去
+	UAuraAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bCriticalHit);
 	Damage = bCriticalHit ? 2.f * Damage + SourceCriticalHitDamage : Damage;
 
 

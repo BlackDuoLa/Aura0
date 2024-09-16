@@ -8,17 +8,12 @@
 #include "interaction/CombatInterface.h"
 #include "Aura0/Public/AuraGameplayTags.h"
 
-
-
-
-
-
 void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle, 
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-	//UKismetSystemLibrary::PrintString(this, FString("ActivateAbility (C++)"), true, true, FLinearColor::Yellow, 3);
+	
 
 
 }
@@ -63,9 +58,9 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		Actors.Add(Projectile);
 		EffectContextHandle.AddActors(Actors);
 		//添加命中结果
-		FHitResult HirResult;
-		HirResult.Location = ProjectileTargetLocation;
-		EffectContextHandle.AddHitResult(HirResult);
+		FHitResult HitResult;
+		HitResult.Location = ProjectileTargetLocation;
+		EffectContextHandle.AddHitResult(HitResult);
 		//添加技能触发位置
 		EffectContextHandle.AddOrigin(ProjectileTargetLocation);
 

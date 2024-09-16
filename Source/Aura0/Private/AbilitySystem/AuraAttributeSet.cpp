@@ -10,6 +10,7 @@
 #include "interaction/CombatInterface.h"
 #include "Player/AuraPlayerControllerBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
 
 
 UAuraAttributeSet::UAuraAttributeSet()
@@ -194,9 +195,13 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 			}
 
+			//获取到格挡和暴击的定义
+			const bool bBlock = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+			const bool bCriticalHit = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
 
-			//显示伤害，把伤害数值传递过去
-			ShowFloatingText(Props, LocalIncomingDamage);
+	
+			//显示伤害，把伤害数值传递过去，把格挡和暴击结构传递过去
+			ShowFloatingText(Props, LocalIncomingDamage, bBlock, bCriticalHit);
 
 
 
@@ -206,7 +211,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 }
 
 //显示伤害函数
-void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlocckedHit, bool bCriticalHit) const
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{
