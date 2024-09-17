@@ -31,7 +31,7 @@ public:
 
 		//创建蓝图传递的敌人搜到伤害的数据
 		UFUNCTION(Client,Reliable)
-		void ShowDamageNumber(float DamageAmount,ACharacter * TargetCharacter);
+		void ShowDamageNumber(float DamageAmount,ACharacter * TargetCharacter, bool bBlocckedHit, bool bCriticalHit);
 	
 
 protected:

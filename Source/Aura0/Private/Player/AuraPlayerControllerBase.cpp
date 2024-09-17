@@ -45,7 +45,7 @@ void AAuraPlayerControllerBase::PlayerTick(float DeltaTime)
 }
 
 //敌人受击伤害显示
-void AAuraPlayerControllerBase::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+void AAuraPlayerControllerBase::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter, bool bBlocckedHit, bool bCriticalHit)
 {
 	
 	if (IsValid(TargetCharacter) && DamageTextComponentClass)
@@ -56,12 +56,10 @@ void AAuraPlayerControllerBase::ShowDamageNumber_Implementation(float DamageAmou
 		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
 		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 
-		DamageText->SetDamageText(DamageAmount);
+		DamageText->SetDamageText(DamageAmount,bBlocckedHit,bCriticalHit);
 
 
 	}
-
-
 }
 
 //当玩家点击地面，角色就会向鼠标点击的地方移动过去

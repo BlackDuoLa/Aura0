@@ -202,15 +202,11 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	
 			//显示伤害，把伤害数值传递过去，把格挡和暴击结构传递过去
 			ShowFloatingText(Props, LocalIncomingDamage, bBlock, bCriticalHit);
-
-
-
-
 		}
 	}
 }
 
-//显示伤害函数
+//传出伤害函数、格挡、暴击
 void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlocckedHit, bool bCriticalHit) const
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
@@ -219,7 +215,7 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 		if (AAuraPlayerControllerBase* PC = Cast<AAuraPlayerControllerBase>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
 		{
 
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter,bBlocckedHit,bCriticalHit);
 
 		}
 	}
